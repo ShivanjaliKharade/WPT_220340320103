@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <title>Document</title>
+
+
+        <script>
+            $( () => {
+
+                $("#bid"). disabled = false;
+
+                console.log("no more sins");
+
+
+                //on click
+
+                $("#b2").click(() => {
+
+                    console.log("jquery works");
+
+                    let p = $("#bid").val();
+                    let q = $("#bname").val();
+                    let r = $("#bprice").val();
+
+
+                    let ajaxparams = {
+                        type : "get",
+                        datatype : "json",
+                        url : "http://localhost:8081/mdel",
+                        data : { x:p, y:q, z:r },
+
+                        success: (gfs) => {
+                            if(gfs.bookfoundstatus){
+                                $("#msg1").text("Book is added");
+                                $("#msg").text("Book is added to a list");
+                            }
+                            else{
+                                $("#msg1").text("Book is not added");
+                            }
+                        },
+                        error: (e) => {
+                            alert('we have trouble ' + JSON.stringify(e));
+                        },
+                    }; 
+
+                    $.ajax(ajaxparams);
+
+                });
+
+                
+                //on blur
+                $("#bid").blur(() => {
+
+                    console.log("jquery works");
+                    
+
+                    let ajaxparams = {
+                        type : "get",
+                        datatype : "json",
+                        url : "http://localhost:8081/getall",
+                        data : {} ,
+                        success: (output) => {
+                            book = output;
+                            let bookcontents="";
+                            for(let i=0; i<book.length; i++) {
+                                bookcontents += "</br>" + book[i].bookid + " " +book[i].bookname + " " + book[i].price;
+
+                            }
+
+                            $("#msg").html(bookcontents);
+                        },
+                        error: (e) => {
+                            alert('we have trouble ' + e);
+                        },
+                    };
+                    $.ajax(ajaxparams);
+
+                });
+
+
+
+
+            });
+
+
+        </script>
+</head>
+
+
+<body>
+    <input type="text" id="bid" placeholder="Enter Book Id">
+    <span id="msg1"></span> <br>
+    <input type="text" id="bname" placeholder="Enter Book Name"/> <br>
+    <input type="text" id="bprice" placeholder="Enter Book Price"/> <br>
+    <button id="b2">Add a book</button> <br>
+    <span id="msg"></span>
+
+</body>
+</html>
